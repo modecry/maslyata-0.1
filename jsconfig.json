@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": "./",
+    "paths": {
+      "helpers/*": ["src/helpers/*"],
+      "pages/*": ["src/pages/*"],
+      "core/*": ["src/core/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "maslyata-0.1",
+  "version": "0.0.1",
+  "description": "Проект для любимых маслят",
+  "main": "index.js",
+  "repository": "https://github.com/modecry/maslyata-0.1.git",
+  "author": "Alexander Kudryashov <modecrywork@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:dev": "echo start dev script here",
+    "build:dev": "webpack --config config/webpack.common.js",
+    "start": "echo start production mode script here",
+    "build": "echo start production build script here",
+    "lint": "eslint src/**/*.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "8.22.0",
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "^2.8.2",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
