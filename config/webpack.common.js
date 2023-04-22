@@ -1,9 +1,6 @@
-const {
-  CleanWebpackPlugin
-} = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 const paths = require('./paths')
 
@@ -11,16 +8,12 @@ const pages = ['home']
 
 module.exports = {
   entry: pages.reduce((config, pageName) => {
-    config[pageName] = [
-      `${paths.src}/pages/${pageName}/${pageName}.js`,
-      `${paths.src}/pages/${pageName}/style.css`,
-    ]
+    config[pageName] = `${paths.src}/pages/${pageName}/${pageName}.js`
     return config
   }, {}),
-  mode: 'development',
   output: {
     path: paths.build,
-    filename: '[name]/[name].js',
+    filename: '[name].js',
     publicPath: '/',
   },
   optimization: {
@@ -31,58 +24,37 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
-      patterns: [{
-        from: `${paths.src}/static`,
-        to: `${paths.build}/static`,
-        globOptions: {
-          ignore: ['*.DS_Store'],
+      patterns: [
+        {
+          from: `${paths.src}/static`,
+          to: `${paths.build}/static`,
+          globOptions: {
+            ignore: ['*.DS_Store'],
+          },
+          noErrorOnMissing: true,
         },
-        noErrorOnMissing: true,
-      }, ],
+      ],
     }),
     ...pages.map(
       (pageName) =>
-      new HtmlWebpackPlugin({
-        inject: true,
-        template: `${paths.src}/pages/${pageName}/index.html`,
-        filename: `${pageName === 'home' ? 'index.html' : `${pageName}/index.html`}`,
-        chunks: [pageName],
-      })
+        new HtmlWebpackPlugin({
+          inject: true,
+          template: `${paths.src}/pages/${pageName}/index.html`,
+          filename: pageName === 'home' ? 'index.html' : `${pageName}.html`,
+          chunks: [pageName],
+        })
     ),
-    new MiniCssExtractPlugin({
-      filename: ({
-        chunk
-      }) => `${chunk.name}/style.css`,
-    })
   ],
   module: {
     rules: [
       // JavaScript: Use Babel to transpile JavaScript files
-      {
-        test: /\.js$/,
-        use: ['babel-loader']
-      },
-
-      // Styles: Inject CSS into the head with source maps
-      {
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader"
-        ],
-      },
+      { test: /\.js$/, use: ['babel-loader'] },
 
       // Images: Copy image files to build folder
-      {
-        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-        type: 'asset/resource'
-      },
+      { test: /\.(?:ico|gif|png|jpg|jpeg)$/i, type: 'asset/resource' },
 
       // Fonts and SVGs: Inline files
-      {
-        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
-        type: 'asset/inline'
-      },
+      { test: /\.(woff(2)?|eot|ttf|otf|svg|)$/, type: 'asset/inline' },
     ],
   },
   resolve: {
@@ -94,5 +66,4 @@ module.exports = {
       core: `${paths.src}/core`,
     },
   },
-  devtool: 'eval-cheap-module-source-map'
 }
