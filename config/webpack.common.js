@@ -45,7 +45,7 @@ module.exports = {
       new HtmlWebpackPlugin({
         inject: true,
         template: `${paths.src}/pages/${pageName}/${pageName === 'home' ? 'index' : pageName}.html`,
-        filename: `${pageName === 'home' ? '' : `${pageName}/`}${pageName === 'home' ? 'index' : pageName}.html`,
+        filename: `${pageName === 'home' ? 'index.html' : '${pagename}/index.html'}`,
         chunks: [pageName],
       })
     ),
