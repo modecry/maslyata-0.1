@@ -5,9 +5,13 @@ config = {
   ...webpackCommonConfig,
   optimization: {
     ...webpackCommonConfig.optimization,
-    minimizer: [new CssMinimizerPlugin()],
+    minimizer: [
+      // For webpack@5 you can use the `...` syntax to extend existing minimizers
+      `...`,
+      new CssMinimizerPlugin()
+    ],
   },
-  mode: 'production',
+  mode: 'production'
 }
 
 delete config.devtool
