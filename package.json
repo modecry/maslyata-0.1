@@ -14,7 +14,7 @@
     "start": "echo start production mode script here",
     "build": "npm run combineroutes && webpack --config config/webpack.prod.js",
     "lint": "eslint src/**/*.js",
-    "combineroutes": "node ./config/combineRoutes.js"
+    "combineroutes": "node ./scripts/combineRoutes.js"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
