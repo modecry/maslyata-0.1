@@ -1,19 +1,26 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const paths = require('./paths')
+const path = require('path')
+const fs = require('fs')
 
-const pages = ['home']
+const { pages } = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'pages.json')))
 
 module.exports = {
   entry: pages.reduce((config, pageName) => {
-    config[pageName] = `${paths.src}/pages/${pageName}/${pageName}.js`
+    config[pageName] = [
+      `${paths.src}/pages/${pageName}/${pageName}.js`,
+      `${paths.src}/pages/${pageName}/style.css`,
+    ]
     return config
   }, {}),
+  mode: 'development',
   output: {
     path: paths.build,
-    filename: '[name].js',
+    filename: '[name]/[name].js',
     publicPath: '/',
   },
   optimization: {
@@ -40,21 +47,39 @@ module.exports = {
         new HtmlWebpackPlugin({
           inject: true,
           template: `${paths.src}/pages/${pageName}/index.html`,
-          filename: pageName === 'home' ? 'index.html' : `${pageName}.html`,
+          filename: `${pageName === 'home' ? 'index.html' : `${pageName}/index.html`}`,
           chunks: [pageName],
         })
     ),
+    new MiniCssExtractPlugin({
+      filename: ({ chunk }) => `${chunk.name}/style.css`,
+    }),
   ],
   module: {
     rules: [
       // JavaScript: Use Babel to transpile JavaScript files
-      { test: /\.js$/, use: ['babel-loader'] },
+      {
+        test: /\.js$/,
+        use: ['babel-loader'],
+      },
+
+      // Styles: Inject CSS into the head with source maps
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
 
       // Images: Copy image files to build folder
-      { test: /\.(?:ico|gif|png|jpg|jpeg)$/i, type: 'asset/resource' },
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+      },
 
       // Fonts and SVGs: Inline files
-      { test: /\.(woff(2)?|eot|ttf|otf|svg|)$/, type: 'asset/inline' },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        type: 'asset/inline',
+      },
     ],
   },
   resolve: {
@@ -66,4 +91,5 @@ module.exports = {
       core: `${paths.src}/core`,
     },
   },
+  devtool: 'eval-cheap-module-source-map',
 }
