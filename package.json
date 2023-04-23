@@ -9,11 +9,12 @@
   "scripts": {
     "start:dev": "concurrently --kill-others \"npm run watch:front\" \"npm run start:server:dev\"",
     "start:server:dev": "node server/index.js",
-    "build:dev": "webpack --config config/webpack.common.js",
+    "build:dev": "npm run combineroutes && webpack --config config/webpack.common.js",
     "watch:front": "webpack --watch --config config/webpack.common.js",
     "start": "echo start production mode script here",
-    "build": "echo start production build script here",
-    "lint": "eslint src/**/*.js"
+    "build": "npm run combineroutes && webpack --config config/webpack.prod.js",
+    "lint": "eslint src/**/*.js",
+    "combineroutes": "node ./config/combineRoutes.js"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -23,9 +24,13 @@
     "clean-webpack-plugin": "^4.0.0",
     "concurrently": "^7.6.0",
     "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "css-minimizer-webpack-plugin": "^5.0.0",
     "eslint": "8.22.0",
     "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.5",
     "prettier": "^2.8.2",
+    "style-loader": "^3.3.2",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },

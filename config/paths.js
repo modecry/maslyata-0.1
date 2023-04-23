@@ -4,6 +4,9 @@ module.exports = {
     // Source files
     src: path.resolve(__dirname, '../src'),
 
+    // Pages
+    pages: path.resolve(__dirname, '../src/pages'),
+
     // Production build files
     build: path.resolve(__dirname, '../dist'),
 

@@ -4,17 +4,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const paths = require('./paths')
+const path = require('path')
+const fs = require('fs')
 
-const pages = ['home']
+const { pages } = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'pages.json')))
 
 module.exports = {
   entry: pages.reduce((config, pageName) => {
-    config[pageName] = `${paths.src}/pages/${pageName}/${pageName}.js`
+    config[pageName] = [
+      `${paths.src}/pages/${pageName}/${pageName}.js`,
+      `${paths.src}/pages/${pageName}/style.css`,
+    ]
     return config
   }, {}),
+  mode: 'development',
   output: {
     path: paths.build,
-    filename: '[name].js',
+    filename: '[name]/[name].js',
     publicPath: '/',
   },
   optimization: {
